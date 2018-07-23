@@ -1,8 +1,9 @@
 import * as fse from 'fs-extra'
 import * as fg from 'fast-glob'
+import chalk from 'chalk'
 import { encode as _encode } from './encode'
 
-interface LegacifyOptions {
+export interface LegacifyOptions {
   encoding?: string
 }
 
@@ -23,9 +24,16 @@ export default async function encode(
   await Promise.all(
     files.map(async file => {
       // We assume input file is always utf-8
-      const content = String(fse.readFile(file))
+      const content = String(await fse.readFile(file))
       const encoded = _encode(content, file, encoding)
-      await fse.writeFile(file, encoded)
+      await fse
+        .writeFile(file, encoded)
+        .then(() => {
+          console.log(chalk.greenBright('WROTE') + ' ' + file)
+        })
+        .catch(() => {
+          console.error(chalk.redBright('ERROR') + ' ' + file)
+        })
     })
   )
 }
