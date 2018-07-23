@@ -1,6 +1,6 @@
 {
   "name": "legacify-charset",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "katashin",
   "description": "Encode charset from UTF-8 to legacy one",
   "keywords": [
