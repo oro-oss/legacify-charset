@@ -5,7 +5,7 @@ import encode, { LegacifyOptions } from './index'
 
 const help = `
   Usage
-    $ legacify-charset [options] <glob pattern>
+    $ legacify-charset [options] <glob pattern ...>
 
   Options
     --encoding  Specify output encoding (default 'shift_jis')
@@ -31,4 +31,6 @@ if (cli.flags.encoding) {
   options.encoding = cli.flags.encoding
 }
 
-encode(cli.input[0], options)
+cli.input.forEach(pattern => {
+  encode(pattern, options)
+})
