@@ -2,8 +2,14 @@
   "name": "legacify-charset",
   "version": "0.0.0",
   "author": "katashin",
-  "description": "",
-  "keywords": [],
+  "description": "Encode charset from UTF-8 to legacy one",
+  "keywords": [
+    "charset",
+    "encoding",
+    "convert",
+    "utf-8",
+    "cli"
+  ],
   "license": "MIT",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
