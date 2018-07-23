@@ -23,8 +23,7 @@ const cli = meow(help, {
 })
 
 if (!cli.input[0]) {
-  console.log(help)
-  process.exit(0)
+  cli.showHelp()
 }
 
 const options: LegacifyOptions = {}
