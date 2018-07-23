@@ -49,4 +49,21 @@ describe('Encode', () => {
     const result = iconv.decode(encoded, 'shift_jis')
     expect(result).toBe(expected)
   })
+
+  it('adds charset at-rule if not exists', () => {
+    const css = `
+    .foo {
+      color: cyan;
+    }`
+
+    const expected = `@charset "shift_jis";
+
+    .foo {
+      color: cyan;
+    }`
+
+    const encoded = encode(css, 'test.css', 'shift_jis')
+    const result = iconv.decode(encoded, 'shift_jis')
+    expect(result).toBe(expected)
+  })
 })

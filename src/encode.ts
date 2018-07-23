@@ -16,18 +16,22 @@ export function encode(
   }
 }
 
+const htmlCharsetRe = /charset=(['"]?)utf-?8(["']?)/i
 function encodeHtml(html: string, encoding: string): Buffer {
-  const replaced = html.replace(
-    /charset=(['"]?)utf-?8(["']?)/i,
-    `charset=$1${encoding}$2`
-  )
+  const replaced = html.replace(htmlCharsetRe, `charset=$1${encoding}$2`)
   return iconv.encode(replaced, encoding)
 }
 
+const cssCharsetRe = /@charset\s+(['"])utf-?8(['"])/i
 function encodeCss(css: string, encoding: string): Buffer {
-  const replaced = css.replace(
-    /@charset\s+(['"])utf-?8(['"])/i,
-    `@charset $1${encoding}$2`
-  )
+  let replaced: string
+
+  if (!cssCharsetRe.test(css)) {
+    // If @charset does not exist, prepend it
+    replaced = `@charset "${encoding}";\n` + css
+  } else {
+    replaced = css.replace(cssCharsetRe, `@charset $1${encoding}$2`)
+  }
+
   return iconv.encode(replaced, encoding)
 }
