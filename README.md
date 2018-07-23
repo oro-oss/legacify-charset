@@ -1,0 +1,5 @@
+# legacify-charset
+
+## License
+
+MIT
