@@ -1,21 +1,24 @@
 import * as fse from 'fs-extra'
 import * as fg from 'fast-glob'
 import chalk from 'chalk'
-import { encode as _encode } from './encode'
+import { encode } from './encode'
+import { convertLineBreaks } from './line-break'
 
 export interface LegacifyOptions {
   encoding?: string
+  lineBreak?: 'crlf' | false
 }
 
 const defaultOptions: Required<LegacifyOptions> = {
-  encoding: 'shift_jis'
+  encoding: 'shift_jis',
+  lineBreak: false
 }
 
-export default async function encode(
+export default async function transform(
   pattern: string,
   rawOptions: LegacifyOptions = {}
 ): Promise<void> {
-  const { encoding } = {
+  const { encoding, lineBreak } = {
     ...defaultOptions,
     ...rawOptions
   }
@@ -25,9 +28,14 @@ export default async function encode(
     files.map(async file => {
       // We assume input file is always utf-8
       const content = String(await fse.readFile(file))
-      const encoded = _encode(content, file, encoding)
+      const transformed = encode(
+        convertLineBreaks(content, lineBreak),
+        file,
+        encoding
+      )
+
       await fse
-        .writeFile(file, encoded)
+        .writeFile(file, transformed)
         .then(() => {
           console.log(chalk.greenBright('WROTE') + ' ' + file)
         })
